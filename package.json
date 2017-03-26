@@ -1,0 +1,12 @@
+{
+  "name": "analyzer",
+  "version": "0.0.1",
+  "main": "index.html",
+  "chromium-args": "--mixed-context",
+  "scripts":{
+    "start": "nwjs ."
+  },
+  "dependencies": {
+    "d3": "~4.7.4"
+  }
+}
