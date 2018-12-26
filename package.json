@@ -1,12 +1,23 @@
 {
-  "name": "analyzer",
-  "version": "0.0.1",
-  "main": "index.html",
-  "chromium-args": "--mixed-context",
-  "scripts":{
-    "start": "nwjs ."
+  "name": "kidskit",
+  "description": "JSCAD made easy",
+  "private": true,
+  "author": "dmtaub@gmail.com",
+  "version": "0.0.2",
+  "repository": "",
+  "scripts": {
+    "start": "brunch watch --server",
+    "build": "brunch build --production"
   },
-  "dependencies": {
-    "d3": "~4.7.4"
+  "engines": {
+    "node": "10.7.1",
+    "npm": "6.2.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "auto-reload-brunch": "^2",
+    "brunch": "^2.10.17",
+    "coffee-script-brunch": "^3.0.0",
+    "three": "^0.98.0"
   }
 }
