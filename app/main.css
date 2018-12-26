@@ -2,3 +2,14 @@
 .button {
   float: right
 }
+
+#editor {
+  margin: 0;
+  position: absolute;
+  top: 50px;
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+  bottom: 0;
+  left: 0;
+  right: 50%;
+}

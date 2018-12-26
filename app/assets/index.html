@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello World!</title>
+    <title>Coffee for Kids</title>
     <link rel="stylesheet" href="/app.css">
+    <script src="/ace.js"></script>
     <script src="/app.js"></script>
   </head>
   <body>
@@ -10,9 +11,13 @@
 	  <button onclick="openDevTools();">Debug</button>
 	  <button onclick="process.exit();">Quit</button>
   </div-->
-    <h1>Hello World!</h1>
-    We are using node.js and brunch.
-
+    <h2>CoffeeSCAD Reboot!</h2>
+    <div id="editor"> main = (params) ->
+  return [
+    sphere
+      r: 10
+  ]
+    </div>
   </body>
   <!--script type="text/javascript">
 	var openDevTools = function(){
