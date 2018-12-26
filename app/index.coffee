@@ -2,7 +2,7 @@ console.log "HOME"
 
 window.onload = () ->
   console.log("LOADED")
-  editor = ace.edit("editor")
+  window.editor = ace.edit("editor")
   editor.setTheme("ace/theme/monokai")
-  editor.session.setMode("ace/modes/javascript")
+  editor.session.setMode("ace/mode/coffee")
 
