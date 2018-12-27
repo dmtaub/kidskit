@@ -2,87 +2,110 @@ console.log "REQUIRED"
 
 coffeescript = require('coffeescript')
 window.THREE = require('three')
+
+window.core = require('@jscad/core')
+
 #require('three/examples/js/controls/OrbitControls')
 require('three/examples/js/controls/EditorControls')
 
 window.onload = () ->
   console.log("WINDOW LOADED")
-  setupEditor()
-  editor.setValue(editorContent)
-  setupTHREE()
+  window.cad = new CADffee()
 
+# todo, build out examples and pull from localstorage/db
 editorContent = '''main = (params) ->
   return [
     sphere
       r: 10
   ]'''
 
-setupTHREE = () ->
-  # camera
-  x = 2.5
-  #grid
-  size = 10
-  divisions = 10
-  cameraStart = new THREE.Vector3(0, 5,size)
+class CADffee
+  data:
+    # todo: hash code to csg / canonicalized CSG properties to geometry
+    csgCache: {}  #not sure if both are needed...
+    geometryCache: {}
+    sceneRoot: new THREE.Object3D()  # renderables go here
 
+  constructor: ->
+    @setupEditor()
+    @editor.setValue(editorContent)
+    @setupTHREE()
 
-  scene = new THREE.Scene()
-  gridHelper = new THREE.GridHelper( size, divisions )
-  scene.add( gridHelper )
+  parseAndRender: =>
+    console.log("compile")
+    js = coffeescript.compile(@editor.getValue(), {bare:true})
+    core.compile(js).then (result) ->
+      for csg in result
+        csg.toTriangles()
+      console.log(result)
 
-  renderer = new THREE.WebGLRenderer(antialias: true)
-  viewport = document.getElementById('viewport')
-  renderer.setSize viewport.clientWidth, viewport.clientHeight
-  viewport.appendChild renderer.domElement
-  camera = new THREE.PerspectiveCamera(35, viewport.clientWidth / viewport.clientHeight, 1, 1000)
-  camera.position.set cameraStart.toArray()...
-  camera.lookAt new THREE.Vector3()
-  scene.add camera
-  # Light
-  light = new THREE.DirectionalLight(0xFFFFFF)
-  light.position.set 20, 40, -15
-  light.target.position.copy scene.position
+  setupTHREE: ->
+    # camera
+    x = 2.5
+    #grid
+    size = 10
+    divisions = 10
+    cameraStart = new THREE.Vector3(0, size, 2*size)
+    lightStart =  new THREE.Vector3(20, 40, -15)
 
-  render = ->
-    #requestAnimationFrame render
-    renderer.render scene, camera
+    scene = new THREE.Scene()
+    gridHelper = new THREE.GridHelper( size, divisions )
+    scene.add gridHelper
 
-  controls = new THREE.EditorControls( camera, renderer.domElement )
-  controls.addEventListener( 'change', render)
-
-  window.onresize = () ->
+    renderer = new THREE.WebGLRenderer(antialias: true)
+    viewport = document.getElementById('viewport')
     renderer.setSize viewport.clientWidth, viewport.clientHeight
+    viewport.appendChild renderer.domElement
+    camera = new THREE.PerspectiveCamera(35, viewport.clientWidth / viewport.clientHeight, 1, 1000)
+    camera.position.copy(cameraStart)
+    camera.lookAt(scene.position)
+    scene.add camera
+    # Light
+    light = new THREE.DirectionalLight(0xFFFFFF)
+    light.position.copy(lightStart)
+    light.target.position.copy(scene.position)
 
-    camera.aspect = renderer.domElement.offsetWidth / renderer.domElement.offsetHeight
-    camera.updateProjectionMatrix()
+    scene.add @data.sceneRoot
 
-    camera.aspect = renderer.domElement.offsetWidth / renderer.domElement.offsetHeight
-    camera.updateProjectionMatrix()
+    render = ->
+      #requestAnimationFrame render
+      renderer.render scene, camera
 
-    renderer.setSize( renderer.domElement.offsetWidth, renderer.domElement.offsetHeight )
+    controls = new THREE.EditorControls( camera, renderer.domElement )
+    controls.addEventListener( 'change', render )
 
-    render()
-  window.onresize()
+    window.onresize = () ->
+      renderer.setSize viewport.clientWidth, viewport.clientHeight
 
-setupEditor = () ->
-  ace.require("ace/ext/language_tools")
+      camera.aspect = renderer.domElement.offsetWidth / renderer.domElement.offsetHeight
+      camera.updateProjectionMatrix()
 
-  window.editor = ace.edit("editor")
-  editor.setTheme("ace/theme/monokai")
+      camera.aspect = renderer.domElement.offsetWidth / renderer.domElement.offsetHeight
+      camera.updateProjectionMatrix()
 
-  options =
-    enableBasicAutocompletion: true
-    enableSnippets: false
-    enableLiveAutocompletion: false
+      renderer.setSize( renderer.domElement.offsetWidth, renderer.domElement.offsetHeight )
 
-  editor.session.setTabSize(2)
-  editor.session.setMode("ace/mode/coffee")
+      render()
 
-  editor.commands.addCommand
-    name: 'render'
-    bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'}
-    exec: (editor) ->
-      console.log("compile")
-      js = coffeescript.compile(editor.getValue(), {bare:true})
+    window.onresize()
 
-  editor.setOptions(options)
+  setupEditor: () ->
+    ace.require("ace/ext/language_tools")
+
+    @editor = ace.edit("editor")
+    @editor.setTheme("ace/theme/monokai")
+
+    options =
+      enableBasicAutocompletion: true
+      enableSnippets: false
+      enableLiveAutocompletion: false
+
+    @editor.session.setTabSize(2)
+    @editor.session.setMode("ace/mode/coffee")
+
+    @editor.commands.addCommand
+      name: 'render'
+      bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'}
+      exec: @parseAndRender
+
+    @editor.setOptions(options)

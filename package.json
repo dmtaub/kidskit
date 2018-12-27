@@ -14,8 +14,7 @@
     "npm": "6.2.0"
   },
   "dependencies": {
-    "@jscad/core": "^0.3.0",
-    "@jscad/csg": "^0.7.0"
+    "@jscad/core": "^0.3.0"
   },
   "devDependencies": {
     "auto-reload-brunch": "^2",
