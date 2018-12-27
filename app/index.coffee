@@ -16,7 +16,7 @@ window.onload = () ->
 editorContent = '''main = (params) ->
   return [
     sphere
-      r: 10
+      r: 2
   ]'''
 
 class CADffee
@@ -57,8 +57,9 @@ class CADffee
 
      Provided under the MIT License
   ###
-  fromCSG: (csg, defaultColor = [1,255,0,0]) ->
+  fromCSG: (csg, defaultColor = [0,0.5,0.5,0.5]) ->
     three_geometry = new (THREE.Geometry)
+    console.log(csg)
     polygons = csg.toPolygons()
     # dict of different THREE.Colors in mesh
     colors = {}
@@ -84,14 +85,21 @@ class CADffee
         materialIdx = opacities.length - 1
       # for each different color, create a color object
       colorKey = polyColor.join('_')
-      if !(colorKey of colors)
-        color = new (THREE.Color)
+      if not colors[colorKey]?
+        color = new THREE.Color()
         color.setRGB.apply color, polyColor
         colors[colorKey] = color
       # create a mesh face using color (not opacity~material)
       k = 2
       while k < vertices.length
-        face = new (THREE.Face3)(vertices[0], vertices[k - 1], vertices[k], (new (THREE.Vector3)).copy(polygon.plane.normal), colors[colorKey], materialIdx)
+        face = new THREE.Face3(
+          vertices[0],
+          vertices[k - 1],
+          vertices[k],
+          polygon.plane.normal.clone(),
+          colors[colorKey],
+          materialIdx
+        )
         face.materialIdx = materialIdx
         three_geometry.faces.push face
         k++
