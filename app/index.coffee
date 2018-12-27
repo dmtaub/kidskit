@@ -111,11 +111,12 @@ class CADffee
       # trigger wireframe if opa == 0
       asWireframe = opa == 0
       # if opacity == 0, this is just a wireframe
-      phongMaterial = new (THREE.MeshPhongMaterial)(
+      phongMaterial = new THREE.MeshPhongMaterial(
         opacity: opa or 1
         wireframe: asWireframe
         transparent: opa != 1 and opa != 0
-        vertexColors: THREE.FaceColors)
+        vertexColors: THREE.FaceColors
+      )
       # (force black wireframe)
       # if (asWireframe) {
       #     phongMaterial.color = 'black';
@@ -125,15 +126,18 @@ class CADffee
       phongMaterial
     )
     # now, materials is array of materials matching opacities - color not defined yet
-    colorMesh = new (THREE.Mesh)(three_geometry, materials)
+    colorMesh = new THREE.Mesh(
+      three_geometry,
+      materials
+    )
     # pass back bounding sphere radius
     three_geometry.computeBoundingSphere()
     boundLen = three_geometry.boundingSphere.radius + three_geometry.boundingSphere.center.length()
-    phongWireframeMaterial = new (THREE.MeshPhongMaterial)(
+    phongWireframeMaterial = new THREE.MeshPhongMaterial(
       wireframe: true
       transparent: false
       color: 'white')
-    wireframe = new (THREE.Mesh)(three_geometry, phongWireframeMaterial)
+    wireframe = new THREE.Mesh(three_geometry, phongWireframeMaterial)
     # return result;
     return {
       colorMesh: colorMesh
@@ -196,10 +200,22 @@ class CADffee
     camera.position.copy(cameraStart)
     camera.lookAt(scene.position)
     scene.add camera
-    # Light
+
     light = new THREE.DirectionalLight(0xFFFFFF)
     light.position.copy(lightStart)
     light.target.position.copy(scene.position)
+    scene.add light
+
+    # hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6)
+    # hemiLight.color.setHSL 0.6, 0.75, 0.5
+    # hemiLight.groundColor.setHSL 0.095, 0.5, 0.5
+    # hemiLight.position.set 0, 500, 0
+    # scene.add hemiLight
+    # dirLight = new THREE.DirectionalLight(0xffffff, 1)
+    # dirLight.position.set -1, 0.75, 1
+    # dirLight.position.multiplyScalar 50
+    # dirLight.name = 'dirlight'
+    # scene.add dirLight
 
     scene.add @data.sceneRoot
 
