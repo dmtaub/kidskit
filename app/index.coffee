@@ -57,7 +57,7 @@ class CADffee
 
      Provided under the MIT License
   ###
-  fromCSG: (csg, defaultColor = [0,0.5,0.5,0.5]) ->
+  fromCSG: (csg, defaultColor = [0,0.5,0.5,0.9]) ->
     three_geometry = new (THREE.Geometry)
     console.log(csg)
     polygons = csg.toPolygons()
@@ -65,7 +65,7 @@ class CADffee
     colors = {}
     # list of different opacities used by polygons
     opacities = []
-    polygons.forEach ((polygon) ->
+    polygons.forEach ((polygon) =>
       # polygon shared null? -> defaultColor, else extract color
       vertices = polygon.vertices.map(((vertex) ->
         @_getGeometryVertex three_geometry, vertex.pos
@@ -104,7 +104,7 @@ class CADffee
         three_geometry.faces.push face
         k++
       return
-    ), this
+    )
     # for each opacity in array, create a matching material
     # (color are on faces, not materials)
     materials = opacities.map((opa) ->
@@ -116,14 +116,16 @@ class CADffee
         wireframe: asWireframe
         transparent: opa != 1 and opa != 0
         vertexColors: THREE.FaceColors
+        # added this so we could see something
+        flatShading: THREE.FlatShading,
       )
-      # (force black wireframe)
-      # if (asWireframe) {
-      #     phongMaterial.color = 'black';
-      # }
+      # (force white wireframe)
+      # if (asWireframe)
+      #     phongMaterial.color = 'white'
+      #
       if opa > 0 and opa < 1
         phongMaterial.depthWrite = false
-      phongMaterial
+      return phongMaterial
     )
     # now, materials is array of materials matching opacities - color not defined yet
     colorMesh = new THREE.Mesh(
@@ -178,6 +180,9 @@ class CADffee
         #@data.sceneRoot.add(new THREE.AxesHelper(3))
         @data.sceneRoot.add(mesh)
       @render()
+    .catch (error) =>
+      console.error(error.message)
+      console.log(js)
 
   setupTHREE: ->
     # camera
@@ -206,11 +211,11 @@ class CADffee
     light.target.position.copy(scene.position)
     scene.add light
 
-    # hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6)
-    # hemiLight.color.setHSL 0.6, 0.75, 0.5
-    # hemiLight.groundColor.setHSL 0.095, 0.5, 0.5
-    # hemiLight.position.set 0, 500, 0
-    # scene.add hemiLight
+    hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6)
+    hemiLight.color.setHSL 0.6, 0.15, 0.5
+    hemiLight.groundColor.setHSL 0.095, 0.15, 0.5
+    hemiLight.position.set 0, 500, 0
+    scene.add hemiLight
     # dirLight = new THREE.DirectionalLight(0xffffff, 1)
     # dirLight.position.set -1, 0.75, 1
     # dirLight.position.multiplyScalar 50
