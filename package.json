@@ -13,7 +13,10 @@
     "node": "10.7.1",
     "npm": "6.2.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@jscad/core": "^0.3.0",
+    "@jscad/csg": "^0.7.0"
+  },
   "devDependencies": {
     "auto-reload-brunch": "^2",
     "brunch": "^2.10.17",
