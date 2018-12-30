@@ -1,4 +1,6 @@
 module.exports =
+  server:
+    port: 4444
   files:
     javascripts:
       joinTo: 'app.js' #defalt looks in app/

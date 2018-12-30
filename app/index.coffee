@@ -7,17 +7,18 @@ window.core = require('@jscad/core')
 
 #require('three/examples/js/controls/OrbitControls')
 require('three/examples/js/controls/EditorControls')
-
 window.onload = () ->
   console.log("WINDOW LOADED")
   window.cad = new CADffee()
 
 # todo, build out examples and pull from localstorage/db
-editorContent = '''main = (params) ->
+editorContent = '''
+main = (params) ->
   return [
     sphere
       r: 2
-  ]'''
+  ]
+'''
 
 class CADffee
   data:
@@ -201,6 +202,7 @@ class CADffee
     viewport = document.getElementById('viewport')
     renderer.setSize viewport.clientWidth, viewport.clientHeight
     viewport.appendChild renderer.domElement
+    # for now, just one camera
     camera = new THREE.PerspectiveCamera(35, viewport.clientWidth / viewport.clientHeight, 1, 1000)
     camera.position.copy(cameraStart)
     camera.lookAt(scene.position)
@@ -222,6 +224,7 @@ class CADffee
     # dirLight.name = 'dirlight'
     # scene.add dirLight
 
+    Object.assign(@, {three: {scene, renderer, camera}})
     scene.add @data.sceneRoot
 
     @render = ->
