@@ -5,37 +5,37 @@ exports.snippetText = "# Closure loop\n\
 snippet forindo\n\
 	for ${1:name} in ${2:array}\n\
 		do ($1) ->\n\
-			${3:// body}\n\
+			${3:# body}\n\
 # Array comprehension\n\
 snippet fora\n\
 	for ${1:name} in ${2:array}\n\
-		${3:// body...}\n\
+		${3:# body...}\n\
 # Object comprehension\n\
 snippet foro\n\
 	for ${1:key}, ${2:value} of ${3:object}\n\
-		${4:// body...}\n\
+		${4:# body...}\n\
 # Range comprehension (inclusive)\n\
 snippet forr\n\
 	for ${1:name} in [${2:start}..${3:finish}]\n\
-		${4:// body...}\n\
+		${4:# body...}\n\
 snippet forrb\n\
 	for ${1:name} in [${2:start}..${3:finish}] by ${4:step}\n\
-		${5:// body...}\n\
+		${5:# body...}\n\
 # Range comprehension (exclusive)\n\
 snippet forrex\n\
 	for ${1:name} in [${2:start}...${3:finish}]\n\
-		${4:// body...}\n\
+		${4:# body...}\n\
 snippet forrexb\n\
 	for ${1:name} in [${2:start}...${3:finish}] by ${4:step}\n\
-		${5:// body...}\n\
+		${5:# body...}\n\
 # Function\n\
 snippet fun\n\
 	(${1:args}) ->\n\
-		${2:// body...}\n\
+		${2:# body...}\n\
 # Function (bound)\n\
 snippet bfun\n\
 	(${1:args}) =>\n\
-		${2:// body...}\n\
+		${2:# body...}\n\
 # Class\n\
 snippet cla class ..\n\
 	class ${1:`substitute(Filename(), '\\(_\\|^\\)\\(.\\)', '\\u\\2', 'g')`}\n\
@@ -58,17 +58,17 @@ snippet cla class .. extends .. constructor: ..\n\
 # If\n\
 snippet if\n\
 	if ${1:condition}\n\
-		${2:// body...}\n\
+		${2:# body...}\n\
 # If __ Else\n\
 snippet ife\n\
 	if ${1:condition}\n\
-		${2:// body...}\n\
+		${2:# body...}\n\
 	else\n\
-		${3:// body...}\n\
+		${3:# body...}\n\
 # Else if\n\
 snippet elif\n\
 	else if ${1:condition}\n\
-		${2:// body...}\n\
+		${2:# body...}\n\
 # Ternary If\n\
 snippet ifte\n\
 	if ${1:condition} then ${2:value} else ${3:other}\n\
@@ -79,7 +79,7 @@ snippet unl\n\
 snippet swi\n\
 	switch ${1:object}\n\
 		when ${2:value}\n\
-			${3:// body...}\n\
+			${3:# body...}\n\
 \n\
 # Log\n\
 snippet log\n\

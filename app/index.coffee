@@ -20,6 +20,7 @@ main = (params) ->
   ]
 '''
 
+
 class CADffee
   data:
     # todo: hash code to csg / canonicalized CSG properties to geometry
@@ -168,8 +169,13 @@ class CADffee
   #   console.log triangles
 
   parseAndRender: =>
+    cs = @editor.getValue()
     console.log("compile")
-    js = coffeescript.compile(@editor.getValue(), {bare:true})
+    js = coffeescript.compile(cs, {bare:true})
+    console.log(js)
+    if not(js.includes("main = function"))
+      js = "main = function(params){ return #{js} };"
+
     meshes = []
     core.compile(js).then (result) =>
       for csg in result
@@ -256,12 +262,12 @@ class CADffee
     @editor.setTheme("ace/theme/monokai")
 
     options =
-      enableBasicAutocompletion: true
-      enableSnippets: false
-      enableLiveAutocompletion: false
+      enableBasicAutocompletion: false
+      enableSnippets: true
+      enableLiveAutocompletion: true
 
     @editor.session.setTabSize(2)
-    @editor.session.setMode("ace/mode/coffee")
+    @editor.session.setMode("ace/mode/cadffee")
 
     @editor.commands.addCommand
       name: 'render'
