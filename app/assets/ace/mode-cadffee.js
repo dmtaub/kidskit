@@ -10,10 +10,11 @@ ace.define("ace/mode/cadffee_highlight_rules",["require","exports","module","ace
         var identifier = "[$A-Za-z_\\x7f-\\uffff][$\\w\\x7f-\\uffff]*";
 
         var keywords = (
-            "this|throw|then|try|typeof|super|switch|return|break|by|continue|" +
-            "catch|class|in|instanceof|is|isnt|if|else|extends|for|own|" +
-            "finally|function|while|when|new|no|not|delete|debugger|do|loop|of|off|" +
-            "or|on|unless|until|and|yes|yield|export|import|default"
+            // subset of keywords geared toward CADffee
+            "then|super|switch|return|break|by|continue|" +
+            "in|is|isnt|if|else|for|" +
+            "while|when|not|do|loop|off|" +
+            "or|unless|until|and|yes|no|yield"
         );
 
         var langConstant = (
@@ -34,8 +35,9 @@ ace.define("ace/mode/cadffee_highlight_rules",["require","exports","module","ace
         );
 
         var supportFunction = (
-            "Math|JSON|isNaN|isFinite|parseInt|parseFloat|encodeURI|" +
-            "encodeURIComponent|decodeURI|decodeURIComponent|String|"
+            "Math"
+            //"Math|JSON|isNaN|isFinite|parseInt|parseFloat|encodeURI|" +
+            //"encodeURIComponent|decodeURI|decodeURIComponent|String|"
         );
 
         var variableLanguage = (
@@ -46,9 +48,9 @@ ace.define("ace/mode/cadffee_highlight_rules",["require","exports","module","ace
             "keyword": keywords,
             "constant.language": langConstant,
             //"invalid.illegal": illegal,
-            "language.support.class": supportClass,
+            //"language.support.class": supportClass,
             "language.support.function": supportFunction,
-            "variable.language": variableLanguage
+            //"variable.language": variableLanguage
         }, "identifier");
 
         var functionRule = {
