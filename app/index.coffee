@@ -1,8 +1,7 @@
 console.log "REQUIRED"
 
-coffeescript = require('coffeescript')
+window.coffeescript = require('coffeescript')
 window.THREE = require('three')
-
 window.core = require('@jscad/core')
 
 #require('three/examples/js/controls/OrbitControls')
@@ -169,15 +168,17 @@ class CADffee
   #   console.log triangles
 
   parseAndRender: =>
-    cs = @editor.getValue()
-    console.log("compile")
-    js = coffeescript.compile(cs, {bare:true})
-    console.log(js)
+    @cs = @editor.getValue()
+    console.log("compile", coffeescript)
+    js = coffeescript.compile(@cs, {bare: true})
+    @tokens = coffeescript.tokens(@cs)
+    #console.log(js)
     if not(js.includes("main = function"))
       js = "main = function(params){ return #{js} };"
 
     meshes = []
     core.compile(js).then (result) =>
+      @js = js
       for csg in result
         meshes.push @fromCSG(csg).colorMesh
         #TODO: generate buffer geometry from csg polygons directly for efficiency
