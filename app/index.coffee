@@ -29,7 +29,7 @@ class CADffee
 
   constructor: ->
     @setupEditor()
-    @editor.setValue(editorContent)
+    @editor.setValue(@autoLoad() or editorContent)
     @setupTHREE()
 
   clearNode: (node) ->
@@ -166,9 +166,26 @@ class CADffee
   # csgToMesh: (triangles) ->
   #   len = triangles.length
   #   console.log triangles
+  
+  # generateUI:
+
+  #check localstorage on construction
+  autoLoad: =>
+    @code = JSON.parse(localStorage.getItem('CADffee')) or []
+    return @code[0]
+
+  # save last 10 on compile
+  autoSave: =>
+    @code.unshift(@cs)
+    @code.splice(9)
+    localStorage.setItem('CADffee', JSON.stringify(@code))
+
+  clearSaves: =>
+    localStorage.setItem('CADffee',null)
 
   parseAndRender: =>
     @cs = @editor.getValue()
+    @autoSave()
     console.log("compile", coffeescript)
     js = coffeescript.compile(@cs, {bare: true})
     @tokens = coffeescript.tokens(@cs)
