@@ -1,6 +1,6 @@
 console.log "REQUIRED"
 
-window.coffeescript = require('coffeescript')
+window.coffeescript = require('coffeescript/lib/coffeescript/browser')
 window.THREE = require('three')
 window.core = require('@jscad/core')
 
@@ -9,6 +9,61 @@ require('three/examples/js/controls/EditorControls')
 window.onload = () ->
   console.log("WINDOW LOADED")
   window.cad = new CADffee()
+
+React = require('react')
+_ = require('lodash')
+RGL = require('react-grid-layout')
+
+ReactGridLayout = RGL.WidthProvider(RGL)
+
+class BasicLayout extends React.PureComponent
+  defaultProps:
+    className: "layout"
+    items: 3
+    rowHeight: 30
+    onLayoutChange: (->)
+    cols: 5
+
+  constructor: (props) ->
+    super(props)
+
+    layout = this.generateLayout()
+    state = { layout }
+
+  generateDOM = ->
+    null #<div></div>
+  #   _.map(_.range(this.props.items), (i) ->
+  #     <div key={i}>
+  #       <span className="text">{i}</span>
+  #     </div>
+  #   )
+
+  # generateLayout: ->
+  #   p = this.props
+  #   _.map(new Array(p.items), (item, i) ->
+  #     y = _.result(p, "y") or Math.ceil(Math.random() * 4) + 1
+  #     return
+  #       x: (i * 2) % 12
+  #       y: Math.floor(i / 6) * y
+  #       w: 2
+  #       h: y
+  #       i: i.toString()
+  #   )
+
+  # onLayoutChange: (layout) =>
+  #   this.props.onLayoutChange(layout)
+
+  # render = ->
+  #   return (
+  #     <ReactGridLayout
+  #       layout={this.state.layout}
+  #       onLayoutChange={this.onLayoutChange}
+  #       {...this.props}
+  #     >
+  #       {this.generateDOM()}
+  #     </ReactGridLayout>
+  #   )
+
 
 # todo, build out examples and pull from localstorage/db
 editorContent = '''
@@ -293,3 +348,5 @@ class CADffee
       exec: @parseAndRender
 
     @editor.setOptions(options)
+
+console.log(2)

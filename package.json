@@ -18,8 +18,13 @@
   },
   "devDependencies": {
     "auto-reload-brunch": "^2",
+    "babel-brunch": "^7.0.0",
     "brunch": "^2.10.17",
     "coffee-script-brunch": "^3.0.0",
+    "coffeescript": "~2.3.1",
+    "preact": "^8.4.2",
+    "preact-compat": "^3.18.4",
+    "react-grid-layout": "^0.16.6",
     "three": "^0.98.0"
   }
 }
